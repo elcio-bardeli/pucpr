@@ -9,7 +9,7 @@
 # taxa de aprendizado
 # alpha e beta - adam
 # quantidade de camadas e neuronios fully connected
-
+# com e sem pre treinado imagenet
 
 # -*- coding: utf-8 -*-
 
