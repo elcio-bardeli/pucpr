@@ -1,3 +1,5 @@
+# https://www.kaggle.com/c/state-farm-distracted-driver-detection/overview
+
 # -*- coding: utf-8 -*-
 
 import numpy as np
