@@ -4,7 +4,11 @@
 # normalização da imagem 0 a 1, norm e sem norm
 # batch size alterar (só rodou até 10)
 # arquiteturas utilizadas: InceptionV3, ResNet50 e MobilenetV2
-
+# camadas totalmente conectadas
+# global pooling layers
+# taxa de aprendizado
+# alpha e beta - adam
+# quantidade de camadas e neuronios fully connected
 
 
 # -*- coding: utf-8 -*-
