@@ -1,5 +1,12 @@
 # https://www.kaggle.com/c/state-farm-distracted-driver-detection/overview
 
+# tamanho da imagem
+# normalização da imagem 0 a 1, norm e sem norm
+# batch size alterar (só rodou até 10)
+# arquiteturas utilizadas: InceptionV3, ResNet50 e MobilenetV2
+
+
+
 # -*- coding: utf-8 -*-
 
 import numpy as np
