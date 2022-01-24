@@ -1,0 +1,9 @@
+{
+    "version": "0.0.1",
+    "configuration": {
+        "platform":               "jetson",
+        "total_frames":           60,
+        "gpu_warm_up_frames":     10,
+        "different_images_sizes": 5
+    }
+}

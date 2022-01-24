@@ -30,9 +30,6 @@ import random
 import time
 
 import sklearn
-
-
-
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from keras.models import Sequential
@@ -59,20 +56,20 @@ class_names = np.unique(driver_imgs_list['classname'])
 
 # color_type = 1 - gray
 # color_type = 3 - RGB
-#def get_im_cv2(path, img_rows, img_cols, color_type=1):
-def get_im_cv2(path, img_rows, img_cols, color_type=3):
+#def get_im_cv2(path, self.img_rows, self.img_cols, color_type=1):
+def get_im_cv2(path, self.img_rows, self.img_cols, color_type=3):
     # Load as grayscale
     if color_type == 1:
         img = cv2.imread(path, 0)
     elif color_type == 3:
         img = cv2.imread(path)
     # Reduce size
-    resized = cv2.resize(img, (img_cols, img_rows))
+    resized = cv2.resize(img, (self.img_cols, self.img_rows))
     return resized
 
 
-#def get_im_cv2_mod(path, img_rows, img_cols, color_type=1):
-def get_im_cv2_mod(path, img_rows, img_cols, color_type=3):
+#def get_im_cv2_mod(path, self.img_rows, self.img_cols, color_type=1):
+def get_im_cv2_mod(path, self.img_rows, self.img_cols, color_type=3):
     # Load as grayscale
     if color_type == 1:
         img = cv2.imread(path, 0)
@@ -82,7 +79,7 @@ def get_im_cv2_mod(path, img_rows, img_cols, color_type=3):
     rotate = random.uniform(-10, 10)
     M = cv2.getRotationMatrix2D((img.shape[1] / 2, img.shape[0] / 2), rotate, 1)
     img = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
-    resized = cv2.resize(img, (img_cols, img_rows), cv2.INTER_LINEAR)
+    resized = cv2.resize(img, (self.img_cols, self.img_rows), cv2.INTER_LINEAR)
     return resized
 
 
@@ -103,8 +100,8 @@ def get_driver_data():
     return dr
 
 
-#def load_train(img_rows, img_cols, color_type=1):
-def load_train(img_rows, img_cols, color_type=3):
+#def load_train(self.img_rows, self.img_cols, color_type=1):
+def load_train(self.img_rows, self.img_cols, color_type=3):
     X_train = []
     y_train = []
     driver_id = []
@@ -118,7 +115,7 @@ def load_train(img_rows, img_cols, color_type=3):
         files = glob.glob(path)
         for fl in files:
             flbase = os.path.basename(fl)
-            img = get_im_cv2_mod(fl, img_rows, img_cols, color_type)
+            img = get_im_cv2_mod(fl, self.img_rows, self.img_cols, color_type)
             X_train.append(img)
             y_train.append(j)
             driver_id.append(driver_data[flbase])
@@ -130,8 +127,8 @@ def load_train(img_rows, img_cols, color_type=3):
     return X_train, y_train, driver_id, unique_drivers
 
 
-#def load_test(img_rows, img_cols, color_type=1):
-def load_test(img_rows, img_cols, color_type=3):
+#def load_test(self.img_rows, self.img_cols, color_type=1):
+def load_test(self.img_rows, self.img_cols, color_type=3):
     print('Read test images')
     start_time = time.time()
     path = os.path.join('imgs', 'test', '*.jpg')
@@ -142,7 +139,7 @@ def load_test(img_rows, img_cols, color_type=3):
     thr = math.floor(len(files) / 10)
     for fl in files:
         flbase = os.path.basename(fl)
-        img = get_im_cv2_mod(fl, img_rows, img_cols, color_type)
+        img = get_im_cv2_mod(fl, self.img_rows, self.img_cols, color_type)
         X_test.append(img)
         X_test_id.append(flbase)
         total += 1
@@ -201,12 +198,12 @@ def create_submission(predictions, test_id, info):
     result1.to_csv(sub_file, index=False)
 
 
-#def read_and_normalize_train_data(img_rows, img_cols, color_type=1):
-def read_and_normalize_train_data(img_rows, img_cols, color_type=3):
+#def read_and_normalize_train_data(self.img_rows, self.img_cols, color_type=1):
+def read_and_normalize_train_data(self.img_rows, self.img_cols, color_type=3):
     cache_path = os.path.join('cache',
-                              'train_r_' + str(img_rows) + '_c_' + str(img_cols) + '_t_' + str(color_type) + '.dat')
+                              'train_r_' + str(self.img_rows) + '_c_' + str(self.img_cols) + '_t_' + str(color_type) + '.dat')
     if not os.path.isfile(cache_path) or use_cache == 0:
-        train_data, train_target, driver_id, unique_drivers = load_train(img_rows, img_cols, color_type)
+        train_data, train_target, driver_id, unique_drivers = load_train(self.img_rows, self.img_cols, color_type)
         cache_data((train_data, train_target, driver_id, unique_drivers), cache_path)
     else:
         print('Restore train from cache!')
@@ -216,8 +213,8 @@ def read_and_normalize_train_data(img_rows, img_cols, color_type=3):
     train_target = np.array(train_target, dtype=np.uint8)
     #train_data = np.array(train_data, dtype=np.float32)
     #train_target = np.array(train_target, dtype=np.float32)
-    #train_data = train_data.reshape(train_data.shape[0], color_type, img_rows, img_cols)
-    train_data = train_data.reshape(train_data.shape[0], img_rows, img_cols, color_type)
+    #train_data = train_data.reshape(train_data.shape[0], color_type, self.img_rows, self.img_cols)
+    train_data = train_data.reshape(train_data.shape[0], self.img_rows, self.img_cols, color_type)
     train_target = np_utils.to_categorical(train_target, 10)
     train_data = train_data.astype('float32')
     train_data /= 255
@@ -226,12 +223,12 @@ def read_and_normalize_train_data(img_rows, img_cols, color_type=3):
     return train_data, train_target, driver_id, unique_drivers
 
 
-#def read_and_normalize_test_data(img_rows, img_cols, color_type=1):
-def read_and_normalize_test_data(img_rows, img_cols, color_type=3):
+#def read_and_normalize_test_data(self.img_rows, self.img_cols, color_type=1):
+def read_and_normalize_test_data(self.img_rows, self.img_cols, color_type=3):
     cache_path = os.path.join('cache',
-                              'test_r_' + str(img_rows) + '_c_' + str(img_cols) + '_t_' + str(color_type) + '.dat')
+                              'test_r_' + str(self.img_rows) + '_c_' + str(self.img_cols) + '_t_' + str(color_type) + '.dat')
     if not os.path.isfile(cache_path) or use_cache == 0:
-        test_data, test_id = load_test(img_rows, img_cols, color_type)
+        test_data, test_id = load_test(self.img_rows, self.img_cols, color_type)
         cache_data((test_data, test_id), cache_path)
     else:
         print('Restore test from cache!')
@@ -239,8 +236,8 @@ def read_and_normalize_test_data(img_rows, img_cols, color_type=3):
 
     test_data = np.array(test_data, dtype=np.uint8)
     #test_data = np.array(test_data, dtype=np.float32)
-    #test_data = test_data.reshape(test_data.shape[0], color_type, img_rows, img_cols)
-    test_data = test_data.reshape(test_data.shape[0], img_rows, img_cols, color_type)
+    #test_data = test_data.reshape(test_data.shape[0], color_type, self.img_rows, self.img_cols)
+    test_data = test_data.reshape(test_data.shape[0], self.img_rows, self.img_cols, color_type)
     test_data = test_data.astype('float32')
     test_data /= 255
     print('Test shape:', test_data.shape)
@@ -286,10 +283,10 @@ def copy_selected_drivers(train_data, train_target, driver_id, driver_list):
     return data, target, index
 
 
-#def create_model_v1(img_rows, img_cols, color_type=1):
+#def create_model_v1(self.img_rows, self.img_cols, color_type=1):
 #    model = Sequential()
 #    model.add(Convolution2D(32, 3, 3, border_mode='same', init='he_normal',
-#                            input_shape=(color_type, img_rows, img_cols)))
+#                            input_shape=(color_type, self.img_rows, self.img_cols)))
 #    model.add(MaxPooling2D(pool_size=(2, 2)))
 #    model.add(Dropout(0.5))
 #    model.add(Convolution2D(64, 3, 3, border_mode='same', init='he_normal'))
@@ -314,16 +311,16 @@ def copy_selected_drivers(train_data, train_target, driver_id, driver_list):
 
 def run_single():
     # input image dimensions
-    img_rows, img_cols = 256, 256
-    #img_rows, img_cols  = 75 , 75
-    #img_rows, img_cols = 160, 120
+    self.img_rows, self.img_cols = 256, 256
+    #self.img_rows, self.img_cols  = 75 , 75
+    #self.img_rows, self.img_cols = 160, 120
     batch_size = 10
     nb_epoch = 10
     random_state = 51
 
-    train_data, train_target, driver_id, unique_drivers = read_and_normalize_train_data(img_rows, img_cols,
+    train_data, train_target, driver_id, unique_drivers = read_and_normalize_train_data(self.img_rows, self.img_cols,
                                                                                         color_type_global)
-    test_data, test_id = read_and_normalize_test_data(img_rows, img_cols, color_type_global)
+    test_data, test_id = read_and_normalize_test_data(self.img_rows, self.img_cols, color_type_global)
 
     yfull_train = dict()
     yfull_test = []
@@ -342,16 +339,16 @@ def run_single():
     print('Test drivers: ', unique_list_valid)
 
     #EXCLUDED
-    #model = create_model_v1(img_rows, img_cols, color_type_global)
+    #model = create_model_v1(self.img_rows, self.img_cols, color_type_global)
 
     #ADDED
-    base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet',input_shape=(img_rows, img_cols, color_type_global))
+    base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet',input_shape=(self.img_rows, self.img_cols, color_type_global))
     #base_model = tf.keras.applications.ResNet50(include_top=False, weights='imagenet',
-    #                                               input_shape=(img_rows, img_cols, color_type_global))
+    #                                               input_shape=(self.img_rows, self.img_cols, color_type_global))
     #base_model = tf.keras.applications.MobileNetV2(include_top=False, weights='imagenet',
-    #                                            input_shape=(img_rows, img_cols, color_type_global))
+    #                                            input_shape=(self.img_rows, self.img_cols, color_type_global))
     #base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet',
-    #                                                   input_shape=(color_type_global, img_rows, img_cols))
+    #                                                   input_shape=(color_type_global, self.img_rows, self.img_cols))
     #base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet',input_shape=(256, 256, 3))  # não está funcionando por variaveis
     #base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet',input_shape=(75, 75, 3))
     #base_model = tf.keras.applications.InceptionV3(include_top=False, weights='imagenet')
@@ -409,7 +406,7 @@ def run_single():
     #test_prediction = model.predict(test_data, batch_size=2, verbose=1)
     yfull_test.append(test_prediction)
 
-    print('Final log_loss: {}, rows: {} cols: {} epoch: {}'.format(score, img_rows, img_cols, nb_epoch))
+    print('Final log_loss: {}, rows: {} cols: {} epoch: {}'.format(score, self.img_rows, self.img_cols, nb_epoch))
     info_string = 'loss_' + str(score) \
                   + '_r_' + str(img_rows) \
                   + '_c_' + str(img_cols) \
