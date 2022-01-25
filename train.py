@@ -1,7 +1,9 @@
 from data        import Data
 from grid_search import GridSearch
 from models      import Constructor
+from ml_flow     import MlFlow
 
+mlFlow      = MlFlow()
 data        = Data()
 constructor = Constructor()
 gridSearch  = GridSearch()
@@ -9,30 +11,27 @@ gridSearch  = GridSearch()
 all_params  = gridSearch.generate()
 name        = gridSearch.names()
 
+for i,p in enumerate(all_params):
 
-for p in all_params:
-    
+    print("Completed: ", round(i/len(all_params),2),"% ",i,"out of: ",len(all_params))   
+    print("Parameters:", p)
+
     X_train, Y_train,unique_list_train,X_valid, Y_valid,unique_list_valid,test_data, test_id = data.generate(p)
-    model = constructor.build(p,name)
+    model   = constructor.build(p,name)
 
-    model.fit(X_train, Y_train, batch_size=32, epochs=2,
-                verbose=1, validation_data=(X_valid, Y_valid))
+    history = model.fit(X_train, 
+                        Y_train, 
+                        batch_size = p[3], 
+                        epochs     = (10 if p[5] else 30),
+                        verbose    = 1, 
+                        validation_data=(X_valid, Y_valid))
 
-    score = model.evaluate(X_valid, Y_valid, verbose=0)
+    score   = model.evaluate(X_valid, Y_valid, verbose=0)
 
-    print('Score Test log_loss: ', score[0])
-    print('Valid accuracy: ', score[1])
-    print(p)
-    print("______________________________________")
-
-
-    #result = {key: p[name[key]] for key in name}
-    #result['test_log_loss']       = score[0]
-    #result['validation_accuracy'] = score[1]
-
-    #print(result)
+    mlFlow.log_result(history,score,p,i)
 
 
 
+        
 
 
