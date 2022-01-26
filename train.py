@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from modules.data        import Data
 from modules.grid_search import GridSearch
 from modules.models      import Constructor
