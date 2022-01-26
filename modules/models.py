@@ -6,8 +6,8 @@ class Constructor:
     def __init__(self) -> None:
         
         self.constructors = {"Vgg16":       tf.keras.applications.vgg16.VGG16,
-                    "ResNet50":    tf.keras.applications.ResNet50,
-                    "InceptionV3": tf.keras.applications.InceptionV3}
+                             "ResNet50":    tf.keras.applications.ResNet50,
+                             "InceptionV3": tf.keras.applications.InceptionV3}
 
     def build(self,params,name):
         
@@ -25,7 +25,7 @@ class Constructor:
         output = tf.keras.layers.Dense(units=10, activation=tf.nn.softmax)(x)
         model = tf.keras.models.Model(inputs=backbone.inputs, outputs=output)
 
-        model.compile(optimizer=tf.keras.optimizers.Adam(0.0001),
+        model.compile(optimizer=tf.keras.optimizers.Adam(params[4]), #0.0001
                         loss=tf.keras.losses.CategoricalCrossentropy(from_logits=False),
                             metrics=['accuracy'])
 

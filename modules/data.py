@@ -83,7 +83,7 @@ class Data:
 
             k = 0
             for fl in tqdm(files):
-                if k>100:
+                if k>1000:
                     break
                 flbase = os.path.basename(fl)
                 img = self.get_im_cv2_mod(fl, color_type)
@@ -111,7 +111,7 @@ class Data:
         thr = math.floor(len(files) / 10)
         k = 0
         for fl in tqdm(files):
-            if k>100:
+            if k>1000:
                 break
             flbase = os.path.basename(fl)
             img = self.get_im_cv2_mod(fl,color_type)
@@ -228,8 +228,7 @@ class Data:
         return data, target, index
 
     def generate(self,p):
-        print("self.img_cols", p[0][0])
-        print("self.img_rows", p[0][1])
+
 
         if self.img_cols == p[0][0] and self.img_rows == p[0][1] and p[1] == self.normalization:
             
@@ -242,8 +241,8 @@ class Data:
                     self.test_data,        \
                     self.test_id
         
-        self.img_cols      = p[0][0]
-        self.img_rows      = p[0][1]
+        self.img_cols      = p[0][1]
+        self.img_rows      = p[0][0]
         self.normalization = p[1]
 
         yfull_train = dict()

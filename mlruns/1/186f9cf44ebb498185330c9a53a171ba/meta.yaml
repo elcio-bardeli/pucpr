@@ -1,0 +1,15 @@
+artifact_uri: file:///home/pacer/Desktop/pucpr/mlruns/1/186f9cf44ebb498185330c9a53a171ba/artifacts
+end_time: 1643137137677
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 186f9cf44ebb498185330c9a53a171ba
+run_uuid: 186f9cf44ebb498185330c9a53a171ba
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1643137137564
+status: 3
+tags: []
+user_id: pacer

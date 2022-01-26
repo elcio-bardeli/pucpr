@@ -2,19 +2,23 @@ import itertools
 
 class GridSearch:
     def __init__(self) -> None:
+        #480x640
         
-        self.img_size          = [(96, 128),(128, 160),(160, 224)]
-        self.img_normalization = ['0_1','standardzation','none']
-        self.models            = ["Vgg16","ResNet50","InceptionV3"]
+        self.img_size          = [(96, 128),(128, 160),(160, 224)] 
+        self.img_normalization = ['0_1','none','standardzation'] 
+        self.models            = ["InceptionV3","Vgg16","ResNet50"]
         
-        batch_size        = [1,2,3,5,8,10]
-        learning_rate     = [0.01,0.001,0.0001]
-        pre_treined       = [None,'imagenet']
+        self.batch_size        = [4,8,16] 
+        self.learning_rate     = [0.0001] #0.01,0.001,
+        self.pre_treined       = ['imagenet',None] #,
 
     def generate(self) -> list:
         all_params = list(itertools.product(self.img_size,
                                             self.img_normalization,
-                                            self.models))
+                                            self.models,
+                                            self.batch_size, 
+                                            self.learning_rate,
+                                            self.pre_treined))
         return all_params
 
     def names(self):
